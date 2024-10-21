@@ -20,30 +20,26 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Create and start virtual environment
+      - name: Create and install dependencies in virtual environment
         run: |
           python -m venv venv
-          echo "source venv/bin/activate" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          venv/bin/pip install --upgrade pip
+          venv/bin/pip install -r requirements.txt
 
       - name: Lint code with flake8
         run: |
-          pip install flake8
-          flake8 . --ignore=E501,E231  # Adjust to ignore specific errors
+          venv/bin/pip install flake8
+          venv/bin/flake8 . --ignore=E501,E231
 
       - name: Lint code with pylint
         run: |
-          pip install pylint
-          flake8 --ignore=E501,E231 *.py
-          pylint --disable=C0301,C0326 test_app.py
+          venv/bin/pip install pylint
+          venv/bin/flake8 --ignore=E501,E231 *.py
+          venv/bin/pylint --disable=C0301,C0326 test_app.py
 
       - name: Run unit tests
         run: |
-          python -m unittest --verbose --failfast
+          venv/bin/python -m unittest --verbose --failfast
 
       - name: Build Docker image
         run: |
